@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FastSAM · 分割工作台</title>
+<link rel="stylesheet" href="/style.css?v=7">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="mark" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <rect class="mark-a" x="2.5" y="2.5" width="7.5" height="7.5"/>
+      <rect class="mark-b" x="6" y="6" width="7.5" height="7.5"/>
+    </svg>
+    <span class="wordmark">FastSAM</span>
+    <span class="sub">segmentation bench</span>
+  </div>
+  <div class="status">
+    <span id="mode-badge" class="badge badge-pending">连接中…</span>
+    <span id="device-badge" class="badge">—</span>
+  </div>
+</header>
+
+<div id="banner" class="banner hidden"></div>
+
+<main class="layout">
+  <aside class="panel">
+
+    <section class="block">
+      <h2>图像</h2>
+      <div id="dropzone" class="dropzone">
+        <input type="file" id="file" accept="image/*" hidden>
+        <p class="dz-title">拖入图像</p>
+        <button id="pick" class="btn btn-sm">浏览文件…</button>
+        <p class="dz-name" id="filename">未选择</p>
+      </div>
+      <div class="row-label">示例</div>
+      <div id="samples" class="samples"></div>
+    </section>
+
+    <section class="block">
+      <h2>提示方式</h2>
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-mode="everything" role="tab">全图</button>
+        <button class="tab" data-mode="box" role="tab">画框</button>
+        <button class="tab" data-mode="point" role="tab">点选</button>
+        <button class="tab" data-mode="brush" role="tab">修掩码</button>
+      </div>
+      <p id="hint" class="hint"></p>
+      <div id="points" class="points hidden"></div>
+      <div id="brushbar" class="brushbar hidden">
+        <div class="brush-row">
+          <div class="brush-toggle">
+            <button id="brush-add" class="bt on" type="button">添加</button>
+            <button id="brush-erase" class="bt" type="button">擦除</button>
+          </div>
+          <span class="brush-size" id="v-brush">24 px</span>
+        </div>
+        <input type="range" id="brush-size" min="4" max="140" step="2" value="24">
+        <div class="brush-row">
+          <button id="brush-undo" class="btn btn-sm" disabled>撤销一笔</button>
+          <button id="brush-clear" class="btn btn-sm" disabled>清空修整</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="run" class="btn btn-primary">分割</button>
+        <button id="reset" class="btn">清除</button>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>参数</h2>
+      <label class="field">
+        <span>推理尺寸 <b id="v-imgsz">1024</b></span>
+        <input type="range" id="imgsz" min="512" max="1024" step="32" value="1024">
+      </label>
+      <label class="field">
+        <span>置信度 <b id="v-conf">0.25</b></span>
+        <input type="range" id="conf" min="0.05" max="0.95" step="0.05" value="0.25">
+      </label>
+      <label class="field">
+        <span>IoU <b id="v-iou">0.70</b></span>
+        <input type="range" id="iou" min="0.1" max="0.9" step="0.05" value="0.7">
+      </label>
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="contours" checked> 边缘线</label>
+        <label class="check"><input type="checkbox" id="better"> 精细掩码</label>
+      </div>
+      <p class="note">改参数后需重新分割；画框与点选复用已有掩码。</p>
+    </section>
+
+  </aside>
+
+  <section class="stage">
+    <div class="canvas-wrap" id="wrap">
+      <canvas id="view"></canvas>
+      <div id="empty" class="empty">
+        <p class="empty-title">没有图像</p>
+        <p class="empty-hint">拖入一张图，或从左侧「示例」里挑一张</p>
+        <p class="empty-meta">PNG / JPG / WebP，长边 &gt; 1600px 自动缩放</p>
+      </div>
+      <div id="busy" class="busy hidden">
+        <span class="spinner"></span><span id="busy-text">推理中…</span>
+      </div>
+    </div>
+    <footer class="statusbar">
+      <span id="size" class="seg">—</span>
+      <span id="stat-count" class="seg">—</span>
+      <span id="stat-time" class="seg">—</span>
+      <span class="grow"></span>
+      <button id="export-boxes" class="btn btn-sm" disabled>导出框</button>
+      <button id="export-ann" class="btn btn-sm" disabled>保存标注</button>
+      <button id="copy" class="btn btn-sm" disabled>复制 JSON</button>
+      <button id="download" class="btn btn-sm" disabled>导出掩码</button>
+    </footer>
+  </section>
+</main>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/app.js?v=10"></script>
+</body>
+</html>

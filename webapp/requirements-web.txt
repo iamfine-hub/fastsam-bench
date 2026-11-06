@@ -1,0 +1,25 @@
+# FastSAM 工作台（webapp/）的 Python 依赖
+#
+# 用法（在仓库根目录）：
+#   .\.venv\Scripts\python.exe -m pip install -r webapp\requirements-web.txt
+#
+# 注意：torch / torchvision 故意不写在这里 —— CPU 版和 CUDA 版的安装源不同，
+# 需要你自己按《环境清单.md》第 2 节选一个装。装错版本会退化成模拟模式。
+# ultralytics 也不要装：仓库自带 8.0.120，pip 装别的版本会打架。
+
+numpy>=2.0
+opencv-python>=4.10
+scipy>=1.14
+pandas>=2.2
+pillow>=11.0
+PyYAML>=6.0
+tqdm>=4.66
+matplotlib>=3.9
+fastapi>=0.115
+uvicorn>=0.30
+python-multipart>=0.0.9
+requests>=2.32
+psutil>=6.0
+
+# ultralytics 8.0.120 里有 import pkg_resources，setuptools 81 已移除该模块
+setuptools<81

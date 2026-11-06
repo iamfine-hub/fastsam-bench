@@ -1,0 +1,25 @@
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+.idea
+weights
+build/
+*.egg-info/
+gradio_cached_examples
+
+# 虚拟环境
+.venv/
+venv/
+
+# 模型权重（体积大，请按 README 自行下载）
+*.pt
+*.onnx
+*.engine
+
+# 运行时缓存与截图
+webapp/.cache/
+webapp/_shot/
+env_setup.log
+fastsam_coco_preds.json
+*.zip
